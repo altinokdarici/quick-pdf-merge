@@ -6,105 +6,102 @@
   <meta name="keywords" content="quick pdf merge, merge pdfs online, pdf combiner, merge pdf files, combine pdf documents">
   <meta name="description" content="Quick PDF Merge is a fast and easy-to-use online tool for merging PDF files. Combine multiple PDFs into one document quickly and hassle-free. No installation or sign-up required.">
   <title>Merge PDFs Online - Fast and Easy PDF Combiner</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      font-family: 'Roboto', sans-serif;
+      background-color: #282c34; /* One Dark Pro background color */
+      margin: 0;
+      padding: 0;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
-    h1 {
-      color: #333;
+      min-height: 100vh;
     }
     .container {
       text-align: center;
-      background: white;
-      padding: 30px;
+      background: #ffffff;
+      padding: 40px;
       border-radius: 10px;
       box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      max-width: 500px;
+      width: 100%;
+    }
+    h1 {
+      color: #212121;
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+    p {
+      color: #757575;
+      font-size: 18px;
+      margin-bottom: 30px;
     }
     #uploadButton {
       display: inline-block;
       padding: 15px 30px;
       font-size: 18px;
       text-align: center;
-      color: white;
-      background-color: #4CAF50;
+      color: #fff;
+      background-color: #3f51b5;
       border: none;
       border-radius: 5px;
       cursor: pointer;
       transition: background-color 0.3s;
+      outline: none;
+      border: 2px solid transparent;
     }
     #uploadButton:hover {
-      background-color: #45a049;
+      background-color: #303f9f;
     }
     #fileInput {
       display: none;
     }
-    #downloadLink {
-      margin-top: 20px;
-      display: inline-block;
-      padding: 10px 20px;
-      font-size: 16px;
-      color: white;
-      background-color: #2196F3;
-      border: none;
-      border-radius: 5px;
-      text-decoration: none;
-      transition: background-color 0.3s;
-    }
-    #downloadLink:hover {
-      background-color: #1E88E5;
-    }
   </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Merge PDFs Online</h1>
-    <p>Fast and Easy PDF Combiner</p>
-    <button id="uploadButton">Select PDF Files</button>
-    <input type="file" id="fileInput" multiple accept="application/pdf">
-    <a id="downloadLink" style="display: none;">Download Merged PDF</a>
-  </div>
-
-  <!-- Include pdf-lib from CDN -->
-  <script src="https://unpkg.com/pdf-lib@latest/dist/pdf-lib.min.js"></script>
-  <script>
-    document.getElementById('uploadButton').addEventListener('click', () => {
-      document.getElementById('fileInput').click();
-    });
-
-    document.getElementById('fileInput').addEventListener('change', async (event) => {
-      const files = event.target.files;
-      if (files.length === 0) {
-        alert('No files selected');
-        return;
-      }
-
-      // Initialize pdf-lib and create a new PDF document
+</head><body>
+    <div class="container">
+      <h1>Merge PDFs Online</h1>
+      <p>Fast and Easy PDF Combiner</p>
+      <button id="uploadButton">Select PDF Files</button>
+      <input type="file" id="fileInput" multiple accept="application/pdf">
+      <p>All operations are performed locally on your device. No files are uploaded to servers.</p>
+      <a id="downloadLink" style="display: none;">Download Merged PDF</a>
+    </div>
+  
+    <!-- Include pdf-lib from CDN -->
+    <script src="https://unpkg.com/pdf-lib@latest/dist/pdf-lib.min.js"></script>
+    <script>
       const { PDFDocument } = PDFLib;
-      const mergedPdf = await PDFDocument.create();
 
-      for (const file of files) {
-        const arrayBuffer = await file.arrayBuffer();
-        const pdfDoc = await PDFDocument.load(arrayBuffer);
-        const pages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-        pages.forEach((page) => mergedPdf.addPage(page));
-      }
-
-      const mergedPdfBytes = await mergedPdf.save();
-      const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-
-      const downloadLink = document.getElementById('downloadLink');
-      downloadLink.href = url;
-      downloadLink.download = 'merged.pdf';
-      downloadLink.click();
-    });
-  </script>
-</body>
+      document.getElementById('uploadButton').addEventListener('click', () => {
+        document.getElementById('fileInput').click();
+      });
+  
+      document.getElementById('fileInput').addEventListener('change', async (event) => {
+        const files = event.target.files;
+        if (files.length === 0) {
+          alert('No files selected');
+          return;
+        }
+  
+        const mergedPdf = await PDFDocument.create();
+  
+        for (const file of files) {
+          const arrayBuffer = await file.arrayBuffer();
+          const pdfDoc = await PDFDocument.load(arrayBuffer);
+          const pages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+          pages.forEach((page) => mergedPdf.addPage(page));
+        }
+  
+        const mergedPdfBytes = await mergedPdf.save();
+        const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+  
+        const downloadLink = document.getElementById('downloadLink');
+        downloadLink.href = url;
+        downloadLink.download = 'merged.pdf';
+        downloadLink.click();
+      });
+    </script>
+  </body>
 </html>
