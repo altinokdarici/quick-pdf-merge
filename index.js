@@ -183,4 +183,5 @@ function clearState() {
     document.getElementById("fileInput").value = "";
     document.getElementById("thumbnailContainer").innerHTML = "";
     document.getElementById("downloadButton").style.display = "none";
+    allfiles = [];
 }
