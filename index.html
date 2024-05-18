@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multiple File Upload</title>
+  <style>
+    #uploadButton {
+      display: block;
+      width: 200px;
+      height: 50px;
+      margin: 100px auto;
+      font-size: 20px;
+      text-align: center;
+      line-height: 50px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #uploadButton:hover {
+      background-color: #45a049;
+    }
+    #fileInput {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <button id="uploadButton">Upload Files</button>
+  <input type="file" id="fileInput" multiple>
+  <a id="downloadLink" style="display: none;">Download Merged PDF</a>
+
+  <!-- Include pdf-lib from CDN -->
+  <script src="https://unpkg.com/pdf-lib@latest/dist/pdf-lib.min.js"></script>
+  <script>
+    document.getElementById('uploadButton').addEventListener('click', () => {
+      document.getElementById('fileInput').click();
+    });
+
+    document.getElementById('fileInput').addEventListener('change', async (event) => {
+      const files = event.target.files;
+      if (files.length === 0) {
+        alert('No files selected');
+        return;
+      }
+
+      // Initialize pdf-lib and create a new PDF document
+      const { PDFDocument } = PDFLib;
+      const mergedPdf = await PDFDocument.create();
+
+      for (const file of files) {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdfDoc = await PDFDocument.load(arrayBuffer);
+        const pages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+        pages.forEach((page) => mergedPdf.addPage(page));
+      }
+
+      const mergedPdfBytes = await mergedPdf.save();
+      const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+
+      const downloadLink = document.getElementById('downloadLink');
+      downloadLink.href = url;
+      downloadLink.download = 'merged.pdf';
+      downloadLink.style.display = 'block';
+      downloadLink.click();
+    });
+  </script>
+</body>
+</html>
