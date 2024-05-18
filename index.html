@@ -3,21 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Multiple File Upload</title>
+  <title>Merge PDFs Online - Fast and Easy PDF Combiner</title>
   <style>
-    #uploadButton {
-      display: block;
-      width: 200px;
-      height: 50px;
-      margin: 100px auto;
-      font-size: 20px;
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      color: #333;
+    }
+    .container {
       text-align: center;
-      line-height: 50px;
-      background-color: #4CAF50;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    #uploadButton {
+      display: inline-block;
+      padding: 15px 30px;
+      font-size: 18px;
+      text-align: center;
       color: white;
+      background-color: #4CAF50;
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      transition: background-color 0.3s;
     }
     #uploadButton:hover {
       background-color: #45a049;
@@ -25,12 +43,31 @@
     #fileInput {
       display: none;
     }
+    #downloadLink {
+      margin-top: 20px;
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 16px;
+      color: white;
+      background-color: #2196F3;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+    #downloadLink:hover {
+      background-color: #1E88E5;
+    }
   </style>
 </head>
 <body>
-  <button id="uploadButton">Upload Files</button>
-  <input type="file" id="fileInput" multiple>
-  <a id="downloadLink" style="display: none;">Download Merged PDF</a>
+  <div class="container">
+    <h1>Merge PDFs Online</h1>
+    <p>Fast and Easy PDF Combiner</p>
+    <button id="uploadButton">Select PDF Files</button>
+    <input type="file" id="fileInput" multiple accept="application/pdf">
+    <a id="downloadLink" style="display: none;">Download Merged PDF</a>
+  </div>
 
   <!-- Include pdf-lib from CDN -->
   <script src="https://unpkg.com/pdf-lib@latest/dist/pdf-lib.min.js"></script>
